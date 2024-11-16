@@ -34,6 +34,7 @@ export const CheckboxStylesApi: StylesApiData<CheckboxFactory> = {
     { modifier: 'data-error', selector: 'input', condition: '`error` prop is set' },
     { modifier: 'data-indeterminate', selector: 'input', condition: '`indeterminate` prop is set' },
     { modifier: 'data-label-position', selector: 'inner', value: 'Value of `labelPosition` prop' },
+    { modifier: 'data-loading', selector: 'input', condition: '`loading` prop is set' },
   ],
 };
 

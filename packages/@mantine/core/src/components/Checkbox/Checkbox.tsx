@@ -21,6 +21,9 @@ import {
   useStyles,
 } from '../../core';
 import { InlineInput, InlineInputClasses, InlineInputStylesNames } from '../InlineInput';
+import { Loader, LoaderProps } from '../Loader';
+import { LoadingOverlay } from '../LoadingOverlay';
+import { MantineTransition, Transition } from '../Transition';
 import { CheckboxCard } from './CheckboxCard/CheckboxCard';
 import { useCheckboxGroupContext } from './CheckboxGroup.context';
 import { CheckboxGroup } from './CheckboxGroup/CheckboxGroup';
@@ -29,7 +32,7 @@ import { CheckboxIcon } from './CheckIcon';
 import classes from './Checkbox.module.css';
 
 export type CheckboxVariant = 'filled' | 'outline';
-export type CheckboxStylesNames = 'icon' | 'inner' | 'input' | InlineInputStylesNames;
+export type CheckboxStylesNames = 'icon' | 'inner' | 'input' | 'loader' | InlineInputStylesNames;
 export type CheckboxCssVariables = {
   root: '--checkbox-size' | '--checkbox-radius' | '--checkbox-color' | '--checkbox-icon-color';
 };
@@ -79,6 +82,12 @@ export interface CheckboxProps
 
   /** Determines whether icon color with filled variant should depend on `background-color`. If luminosity of the `color` prop is less than `theme.luminosityThreshold`, then `theme.white` will be used for text color, otherwise `theme.black`. Overrides `theme.autoContrast`. */
   autoContrast?: boolean;
+
+  /** Determines whether the `Loader` component should be displayed over the checkbox */
+  loading?: boolean;
+
+  /** Props added to the `Loader` component (only visible when `loading` prop is set) */
+  loaderProps?: LoaderProps;
 }
 
 export type CheckboxFactory = Factory<{
@@ -150,6 +159,8 @@ export const Checkbox = factory<CheckboxFactory>((_props, ref) => {
     onChange,
     autoContrast,
     mod,
+    loading,
+    loaderProps,
     ...others
   } = props;
 
@@ -194,7 +205,7 @@ export const Checkbox = factory<CheckboxFactory>((_props, ref) => {
       label={label}
       description={description}
       error={error}
-      disabled={disabled}
+      disabled={disabled || loading}
       classNames={classNames}
       styles={styles}
       unstyled={unstyled}
@@ -206,20 +217,23 @@ export const Checkbox = factory<CheckboxFactory>((_props, ref) => {
       {...wrapperProps}
     >
       <Box {...getStyles('inner')} mod={{ 'data-label-position': labelPosition }}>
+        {loading && (
+          <Loader color="var(--checkbox-color)" size="var(--checkbox-size)" {...loaderProps} />
+        )}
+
         <Box
           component="input"
           id={uuid}
           ref={ref}
           checked={checked}
-          disabled={disabled}
-          mod={{ error: !!error, indeterminate }}
+          disabled={disabled || loading}
+          mod={{ error: !!error, indeterminate, loading }}
           {...getStyles('input', { focusable: true, variant })}
           onChange={onChange}
           {...rest}
           {...contextProps}
           type="checkbox"
         />
-
         <Icon indeterminate={indeterminate} {...getStyles('icon')} />
       </Box>
     </InlineInput>

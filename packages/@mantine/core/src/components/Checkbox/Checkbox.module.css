@@ -50,6 +50,14 @@
     border-color: var(--mantine-color-error);
   }
 
+  &:where([data-loading]) {
+    opacity: 0;
+
+    & + .icon {
+      visibility: hidden;
+    }
+  }
+
   &[data-indeterminate],
   &:checked {
     background-color: var(--checkbox-color);

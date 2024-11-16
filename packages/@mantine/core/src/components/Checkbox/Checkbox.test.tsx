@@ -124,4 +124,11 @@ describe('@mantine/core/Checkbox', () => {
     render(<Checkbox {...defaultProps} rootRef={ref} />);
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
+
+  it('sets data-loading attribute when loading prop is set to true', () => {
+    const { container, rerender } = render(<Checkbox loading />);
+    expect(container.querySelector('[data-loading]')).toBeInTheDocument();
+    rerender(<Checkbox loading={false} />);
+    expect(container.querySelector('[data-loading]')).not.toBeInTheDocument();
+  });
 });

@@ -180,3 +180,19 @@ export function Sizes() {
 export function Unstyled() {
   return <Checkbox label="Unstyled checkbox" unstyled />;
 }
+
+export function Loading() {
+  const [loading, setLoading] = useState(false);
+  return (
+    <Stack style={{ width: 300, padding: 20 }}>
+      <Checkbox
+        label="Checkbox With Loader"
+        loading={loading}
+        onChange={() => {
+          setLoading(true);
+          setTimeout(() => setLoading(false), 1000);
+        }}
+      />
+    </Stack>
+  );
+}
